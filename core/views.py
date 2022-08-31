@@ -11,8 +11,8 @@ class TaskViewSet(viewsets.ModelViewSet):
 
 
 class MarkViewSet(viewsets.ModelViewSet):
-    serializer_class = TaskSerializer
-    queryset = Task.objects.all()
+    serializer_class = MarkSerializer
+    queryset = Mark.objects.all()
 
 
 class TaskSchemaAPIView(APIView):
