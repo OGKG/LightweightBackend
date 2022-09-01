@@ -1,8 +1,7 @@
 from .models import Task, Mark, Module
 from .serializers import TaskSerializer, MarkSerializer, ModuleSerializer
-from .util import get_task_class
+from .util import get_task_class, get_grader_class
 from rest_framework import viewsets
-from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from CGTasks.graham.grader import GrahamGrader
@@ -23,7 +22,7 @@ class TaskViewSet(viewsets.ModelViewSet):
             for answer, answer_data
             in zip(correct_answers, json.loads(request.data['answer']))
         ]
-        return Response(GrahamGrader.grade(correct_answers, student_answers))
+        return Response(get_grader_class(task_orm).grade(correct_answers, student_answers))
 
     @action(detail=True)
     def schema(self, request, *args, **kwargs):
