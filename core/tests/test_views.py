@@ -1,5 +1,10 @@
+import json
 from django.test import TestCase, Client
-from core.models import Task
+from core.models import Task, Mark
+from core.tests.answer import correct_answer
+from django.contrib.auth import get_user_model
+from rest_framework.exceptions import NotAuthenticated
+User = get_user_model()
 
 
 class ViewTest(TestCase):
@@ -33,283 +38,29 @@ class ViewTest(TestCase):
                 }
             ]
         })
+        self.credentials = {"username": "user", "password": "123123123"}
+        u = User.objects.create(username="user")
+        u.set_password("123123123")
+        u.save()
+
+    
     def test_task_turn_in(self):
         c = Client(HTTP_USER_AGENT='Mozilla/5.0')
-        import json
-        # def call():
-        #     c.post('/tasks/1/turn_in/', {})
-        # self.assertRaises(TypeError, call)
+
+        def call():
+            return c.post('/tasks/1/turn_in/', {})
+        self.assertEqual(call().status_code, 403)
+
         def call_correct_payload():
-            return c.post('/tasks/1/turn_in/', {'answer': json.dumps(
-            [
-    {
-        "x": 4.666666666666667,
-        "y": 2.0
-    },
-    {
-        "points": [
-            {
-                "x": 4.0,
-                "y": 0.0
-            },
-            {
-                "x": 6.0,
-                "y": 4.0
-            },
-            {
-                "x": 2.0,
-                "y": 4.0
-            },
-            {
-                "x": 4.0,
-                "y": 2.0
-            },
-            {
-                "x": 3.0,
-                "y": 2.0
-            },
-            {
-                "x": 1.0,
-                "y": 0.0
-            }
-        ]
-    },
-    {
-        "x": 4.0,
-        "y": 0.0
-    },
-    {
-        "rows": [
-            {
-                "cells": [
-                    {
-                        "content": [
-                            {
-                                "x": 4.0,
-                                "y": 0.0
-                            },
-                            {
-                                "x": 6.0,
-                                "y": 4.0
-                            },
-                            {
-                                "x": 2.0,
-                                "y": 4.0
-                            }
-                        ]
-                    },
-                    {
-                        "content": "less"
-                    },
-                    {
-                        "content": {
-                            "x": 6.0,
-                            "y": 4.0
-                        }
-                    },
-                    {
-                        "content": "yes"
-                    }
-                ]
-            },
-            {
-                "cells": [
-                    {
-                        "content": [
-                            {
-                                "x": 6.0,
-                                "y": 4.0
-                            },
-                            {
-                                "x": 2.0,
-                                "y": 4.0
-                            },
-                            {
-                                "x": 4.0,
-                                "y": 2.0
-                            }
-                        ]
-                    },
-                    {
-                        "content": "less"
-                    },
-                    {
-                        "content": {
-                            "x": 2.0,
-                            "y": 4.0
-                        }
-                    },
-                    {
-                        "content": "yes"
-                    }
-                ]
-            },
-            {
-                "cells": [
-                    {
-                        "content": [
-                            {
-                                "x": 2.0,
-                                "y": 4.0
-                            },
-                            {
-                                "x": 4.0,
-                                "y": 2.0
-                            },
-                            {
-                                "x": 3.0,
-                                "y": 2.0
-                            }
-                        ]
-                    },
-                    {
-                        "content": "more"
-                    },
-                    {
-                        "content": {
-                            "x": 4.0,
-                            "y": 2.0
-                        }
-                    },
-                    {
-                        "content": "no"
-                    }
-                ]
-            },
-            {
-                "cells": [
-                    {
-                        "content": [
-                            {
-                                "x": 6.0,
-                                "y": 4.0
-                            },
-                            {
-                                "x": 2.0,
-                                "y": 4.0
-                            },
-                            {
-                                "x": 3.0,
-                                "y": 2.0
-                            }]
-                    },
-                    {
-                        "content": "less"
-                    },
-                    {
-                        "content": {
-                            "x": 2.0,
-                            "y": 4.0
-                        }
-                    },
-                    {
-                        "content": "yes"
-                    }
-                ]
-            },
-            {
-                "cells": [
-                    {
-                        "content": [
-                            {
-                                "x": 2.0,
-                                "y": 4.0
-                            },
-                            {
-                                "x": 3.0,
-                                "y": 2.0
-                            },
-                            {
-                                "x": 1.0,
-                                "y": 0.0
-                            }
-                        ]
-                    },
-                    {
-                        "content": "more"
-                    },
-                    {
-                        "content": {
-                            "x": 3.0,
-                            "y": 2.0
-                        }
-                    },
-                    {
-                        "content": "no"
-                    }
-                ]
-            },
-            {
-                "cells": [
-                    {
-                        "content": [
-                            {
-                                "x": 6.0,
-                                "y": 4.0
-                            },
-                            {
-                                "x": 2.0,
-                                "y": 4.0
-                            },
-                            {
-                                "x": 1.0,
-                                "y": 0.0
-                            }
-                        ]
-                    },
-                    {
-                        "content": "less"
-                    },
-                    {
-                        "content": {
-                            "x": 2.0,
-                            "y": 4.0
-                        }
-                    },
-                    {
-                        "content": "yes"
-                    }
-                ]
-            },
-            {
-                "cells": [
-                    {
-                        "content": [
-                            {
-                                "x": 2.0,
-                                "y": 4.0
-                            },
-                            {
-                                "x": 1.0,
-                                "y": 0.0
-                            },
-                            {
-                                "x": 4.0,
-                                "y": 0.0
-                            }
-                        ]
-                    },
-                    {
-                        "content": "less"
-                    },
-                    {
-                        "content": {
-                            "x": 1.0,
-                            "y": 0.0
-                        }
-                    },
-                    {
-                        "content": "yes"
-                    }
-                ]
-            }
-        ],
-        "headers": [
-            "",
-            "",
-            "",
-            ""
-        ]
-    }
-            ])})
+            return c.post('/tasks/1/turn_in_idle/', {'answer': json.dumps(correct_answer)})
         self.assertEqual(call_correct_payload().status_code, 200)
+        c.login(**self.credentials)
+
+        def call_not_idle():
+            return c.post('/tasks/1/turn_in/', {'answer': json.dumps(correct_answer)})
+        call_not_idle()
+        try:
+            Mark.objects.get(user_id=1, task_id=1).mark
+            self.assertEqual(Mark.objects.get(user_id=1, task_id=1).mark, 2)
+        except:
+            self.fail()

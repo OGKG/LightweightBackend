@@ -1,4 +1,5 @@
 from core.models import *
+from django.db import transaction
 from django.test import TestCase
 from django.contrib.auth import get_user_model
 User = get_user_model()
@@ -46,6 +47,7 @@ class ModelTest(TestCase):
     def test_unique_mark_contraint(self):
         from django.db.utils import IntegrityError
         def create_two_marks():
-            Mark.objects.create(task_id = 1, user_id = 1, mark=1)
-            Mark.objects.create(task_id = 1, user_id = 1, mark=1)
+            with transaction.atomic():
+                Mark.objects.create(task_id = 1, user_id = 1, mark=1)
+                Mark.objects.create(task_id = 1, user_id = 1, mark=1)
         self.assertRaises(IntegrityError, create_two_marks)
