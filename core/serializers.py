@@ -13,7 +13,9 @@ class MarkSerializer(serializers.ModelSerializer):
         model = Mark
         fields = '__all__'
 
+
 class ModuleSerializer(serializers.ModelSerializer):
+    tasks = TaskSerializer(many=True, read_only=True)
     class Meta:
         model = Module
         fields = '__all__'
