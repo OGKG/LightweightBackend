@@ -1,5 +1,5 @@
-from .models import Task, Mark
-from .serializers import TaskSerializer, MarkSerializer
+from .models import Task, Mark, Module
+from .serializers import TaskSerializer, MarkSerializer, ModuleSerializer
 from .util import get_task_class
 from rest_framework import viewsets
 from rest_framework.views import APIView
@@ -13,6 +13,11 @@ class TaskViewSet(viewsets.ModelViewSet):
 class MarkViewSet(viewsets.ModelViewSet):
     serializer_class = MarkSerializer
     queryset = Mark.objects.all()
+
+
+class ModuleViewSet(viewsets.ModelViewSet):
+    serializer_class = ModuleSerializer
+    queryset = Module.objects.all()
 
 
 class TaskSchemaAPIView(APIView):
