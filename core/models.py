@@ -20,4 +20,5 @@ class Mark(models.Model):
 
 class Module(models.Model):
     tasks = models.ManyToManyField(Task, 'modules')
+    name = models.TextField(null=False, blank=False)
 
