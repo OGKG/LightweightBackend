@@ -42,3 +42,10 @@ class ModelTest(TestCase):
         mod = Module.objects.get(id=1)
         u = User.objects.get(id=1)
         self.assertEqual(mod.mark_of(u), 1)
+
+    def test_unique_mark_contraint(self):
+        from django.db.utils import IntegrityError
+        def create_two_marks():
+            Mark.objects.create(task_id = 1, user_id = 1, mark=1)
+            Mark.objects.create(task_id = 1, user_id = 1, mark=1)
+        self.assertRaises(IntegrityError, create_two_marks)
