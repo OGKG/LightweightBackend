@@ -25,6 +25,10 @@ class TaskViewSet(viewsets.ModelViewSet):
         ]
         return Response(GrahamGrader.grade(correct_answers, student_answers))
 
+    @action(detail=True)
+    def schema(self, request, *args, **kwargs):
+        return Response(get_task_class(self.get_object()).answer_schema())
+
 
 class MarkViewSet(viewsets.ModelViewSet):
     serializer_class = MarkSerializer
@@ -34,14 +38,3 @@ class MarkViewSet(viewsets.ModelViewSet):
 class ModuleViewSet(viewsets.ModelViewSet):
     serializer_class = ModuleSerializer
     queryset = Module.objects.all()
-
-
-class TaskSchemaAPIView(APIView):
-    def get(self, request, id):
-        task = Task.objects.get(id=id)
-        # model_type = Task.mapping.get(task.type)
-        return Response(get_task_class(task).answer_schema())
-
-
-class AnswerAPIView(APIView):
-    pass
